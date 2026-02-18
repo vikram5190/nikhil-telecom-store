@@ -3,33 +3,22 @@
 import { useState } from "react";
 
 export default function AdminPage() {
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
   const handleLogin = async () => {
-    const firebase = await import("firebase/app");
-    const authModule = await import("firebase/auth/dist/esm2017/index.js");
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ password }),
+    });
 
-    const { initializeApp, getApps, getApp } = firebase;
-    const { getAuth, signInWithEmailAndPassword } = authModule;
-
-    const firebaseConfig = {
-      apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-      authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-      projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-    };
-
-    const app =
-      !getApps().length ? initializeApp(firebaseConfig) : getApp();
-
-    const auth = getAuth(app);
-
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      setMessage("Login successful ✅");
-    } catch (error) {
-      setMessage("Login failed ❌");
+    if (res.ok) {
+      window.location.reload();
+    } else {
+      setMessage("Wrong password ❌");
     }
   };
 
@@ -38,16 +27,8 @@ export default function AdminPage() {
       <h1>Admin Login - Nikhil Telecom</h1>
 
       <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        style={{ display: "block", marginBottom: 10 }}
-      />
-
-      <input
         type="password"
-        placeholder="Password"
+        placeholder="Enter Admin Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         style={{ display: "block", marginBottom: 10 }}
