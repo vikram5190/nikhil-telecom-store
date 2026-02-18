@@ -20,7 +20,7 @@ export default function AdminPage() {
 
   return (
     <div style={{ padding: 40 }}>
-      <h1>Admin Login - Nikhil Telecom</h1>
+      <h1>A...dmin Login - Nikhil Telecom</h1>
 
       <input
         type="email"
