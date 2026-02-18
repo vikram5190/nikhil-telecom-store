@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { auth } from "../../lib/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
 
 export default function AdminPage() {
   const [email, setEmail] = useState("");
@@ -10,6 +8,9 @@ export default function AdminPage() {
   const [message, setMessage] = useState("");
 
   const handleLogin = async () => {
+    const { auth } = await import("../../lib/firebase");
+    const { signInWithEmailAndPassword } = await import("firebase/auth");
+
     try {
       await signInWithEmailAndPassword(auth, email, password);
       setMessage("Login successful ✅");
@@ -20,7 +21,7 @@ export default function AdminPage() {
 
   return (
     <div style={{ padding: 40 }}>
-      <h1>A...dmin Login - Nikhil Telecom</h1>
+      <h1>Admin Login - Nikhil Telecom</h1>
 
       <input
         type="email"
