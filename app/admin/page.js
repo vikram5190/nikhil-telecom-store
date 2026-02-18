@@ -8,8 +8,22 @@ export default function AdminPage() {
   const [message, setMessage] = useState("");
 
   const handleLogin = async () => {
-    const { auth } = await import("../../lib/firebase");
-    const { signInWithEmailAndPassword } = await import("firebase/auth");
+    const firebase = await import("firebase/app");
+    const authModule = await import("firebase/auth/dist/esm2017/index.js");
+
+    const { initializeApp, getApps, getApp } = firebase;
+    const { getAuth, signInWithEmailAndPassword } = authModule;
+
+    const firebaseConfig = {
+      apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+      authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+      projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    };
+
+    const app =
+      !getApps().length ? initializeApp(firebaseConfig) : getApp();
+
+    const auth = getAuth(app);
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
